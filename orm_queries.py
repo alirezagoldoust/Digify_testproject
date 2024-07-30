@@ -4,6 +4,7 @@ from django.db import connection, reset_queries
 
 
 
+
 # cost of all of orders
 Order.objects.aggregate(Sum("cost"))
 
