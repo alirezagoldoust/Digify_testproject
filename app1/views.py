@@ -1,11 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
+from django.db.models import F
+from .models import Order, Store
 
-# Create your views here.
+def get_products(request):
+    orders = list(Order.objects.select_related('store').annotate(store_name=F('store__name')).values('id', 'cost', 'store_name'))
+    print(orders)
+    return JsonResponse(orders, safe=False)
 
-# 1. Store.objects.annotate(order_num=Count("orders")).filter(order_num__gte=0).values('name', 'order_num')
-# 2. Store.objects.annotate(order_num=Count("order")).values('name', 'order_num')
-# 3. Store.objects.annotate(order_num=Count("order")).values('name', 'order_num')
-# 4. Order.objects.aggregate(Sum("cost"))
-
-#1.2 Order.objects.values("store__name").annotate(Count("cost"))
-#2.2 Order.objects.values("store__name").annotate(Sum("cost"))
