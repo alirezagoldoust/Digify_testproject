@@ -21,10 +21,11 @@ class OrderListTest(APIView):
     serializer_class = OrderSerializer
     def get(self, request):
         reset_queries()
+        # data = Order.objects.select_related('store').all()
         data = Order.objects.all()
         for i in data:
             if i.store.domain.endswith('.com'):
-                print('Ok')
+                pass
         serializer = OrderSerializer(data, many=True)
         return Response(serializer.data)
 
