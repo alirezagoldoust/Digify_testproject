@@ -1,6 +1,7 @@
 from app1.models import Order, Store
-from django.db.models import Count, Sum, Case, When
+from django.db.models import Count, Sum, Case, When, F, Avg
 from django.db import connection, reset_queries
+import pprint
 
 
 
@@ -21,3 +22,6 @@ Order.objects.select_related("store").values("store__name").annotate(Count("cost
 Order.objects.annotate(
         large_order=Case(When(cost__gte=20000, then=True), default=False)
     ).values("id", "large_order")
+
+
+Order.objects.select_related('store').annotate(store_name=F('store__name'), store_avg=Avg('store__orders__cost'))
